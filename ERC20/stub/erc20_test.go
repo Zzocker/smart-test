@@ -1,4 +1,4 @@
-package contract
+package stub
 
 import (
 	"math/big"
@@ -183,17 +183,17 @@ func TestTransferFrom(t *testing.T) {
 	defer sim.Close()
 	initialToken := int64(1e10)
 
-	t.Run("NoAllowance",func(t *testing.T) {
+	t.Run("NoAllowance", func(t *testing.T) {
 		_, err := contract.TransferFrom(&bind.TransactOpts{
 			From:   accounts[1].From,
 			Signer: accounts[1].Signer,
 		}, accounts[0].From, accounts[2].From, big.NewInt(1))
-		if err==nil{
+		if err == nil {
 			t.Error("should not able to tranfer with zero allowance")
 		}
 	})
 
-	t.Run("SpendHigherThenAllowance",func(t *testing.T) {
+	t.Run("SpendHigherThenAllowance", func(t *testing.T) {
 		allowance := int64(1e2)
 		contract.Approve(&bind.TransactOpts{
 			From:   accounts[0].From,
@@ -204,7 +204,7 @@ func TestTransferFrom(t *testing.T) {
 			From:   accounts[2].From,
 			Signer: accounts[2].Signer,
 		}, accounts[0].From, accounts[1].From, big.NewInt(allowance+1))
-		if err==nil{
+		if err == nil {
 			t.Error("should not able to tranfer token greater then allowed")
 		}
 	})
@@ -225,15 +225,15 @@ func TestTransferFrom(t *testing.T) {
 			t.Error(err)
 		}
 		// check balance of `_from`
-		if got,_ := contract.Balances(nil,accounts[0].From);got.Int64() != initialToken-allowance+1{
+		if got, _ := contract.Balances(nil, accounts[0].From); got.Int64() != initialToken-allowance+1 {
 			t.Error("_from account balance missmatch")
 		}
 		// check balance of `_to`
-		if got,_ := contract.Balances(nil,accounts[2].From);got.Int64() != allowance-1{
+		if got, _ := contract.Balances(nil, accounts[2].From); got.Int64() != allowance-1 {
 			t.Error("_to account balance missmatch")
 		}
 		// check allowance of sender
-		if got,_ := contract.Allowed(nil,accounts[0].From,accounts[1].From);got.Int64() != 1{
+		if got, _ := contract.Allowed(nil, accounts[0].From, accounts[1].From); got.Int64() != 1 {
 			t.Error("allowance missmatch")
 		}
 		// TODO add event test
