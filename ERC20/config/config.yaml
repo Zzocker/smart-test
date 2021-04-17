@@ -1,6 +1,6 @@
 node:
     type: ganache
-    url: http://localhost:8545
+    url: ws://localhost:7545
 deploy:
     contractAddress: 
     ownerKey: keys/contract_owner

@@ -61,10 +61,10 @@ func deploy(cfg *config.Config) error {
 	_ = auth
 	log.Printf("Deploy contract with initialToken = %d , symbol = %s , name = %s", cfg.Deploy.InitialToken, cfg.Deploy.TokenSymbol, cfg.Deploy.TokenName)
 	address, _, _, err := stub.DeployERC20(auth, client, big.NewInt(cfg.Deploy.InitialToken), cfg.Deploy.TokenName, cfg.Deploy.TokenSymbol, cfg.Deploy.TokenDecimal)
-	if err!=nil{
+	if err != nil {
 		return err
 	}
-	log.Printf("ERC20 contract deployed at address = %s",address.String())
+	log.Printf("ERC20 contract deployed at address = %s", address.String())
 	cfg.Deploy.ContractAddress = address.String()
 	return nil
 }

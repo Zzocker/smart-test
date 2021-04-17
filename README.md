@@ -36,3 +36,23 @@ Smart Test is a collection of ethereum smart contract written in solidity with u
     - string public constant name
     - string public constant symbol
     - uint8 public constant decimals
+
+### Deploy
+- Update config file at `ERC20/config/config.yaml`
+    - 
+    ```
+    node:
+        type: ganache
+        url: ws://localhost:7545
+    deploy:
+        contractAddress: 
+        ownerKey: keys/contract_owner
+        initialToken: 1000000000000000000
+        tokenName: INR
+        tokenSymbol: ₹
+        tokenDecimal: 1  
+    ```
+    - Run `./bin/deploy`
+
+### Start Event Watcher
+Run `./bin/event`
