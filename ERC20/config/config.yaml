@@ -1,0 +1,10 @@
+node:
+    type: ganache
+    url: http://localhost:8545
+deploy:
+    contractAddress: 
+    ownerKey: keys/contract_owner
+    initialToken: 1000000000000000000
+    tokenName: INR
+    tokenSymbol: ₹
+    tokenDecimal: 1
