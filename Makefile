@@ -3,5 +3,5 @@ build:
 	abigen --sol OpenAuction/OpenAuction.sol --pkg openauction --out OpenAuction/OpenAuction.go
 	abigen --sol  ERC20/contract/erc20.sol --pkg stub --out ERC20/stub/erc20.go
 erc20:
-	go build -o ERC20/bin/deploy ERC20/cmd/deploy.go
-	go build -o ERC20/bin/event ERC20/cmd/event.go
+	go build -o ERC20/bin/deploy ERC20/cmd/deploy/deploy.go
+	go build -o ERC20/bin/event ERC20/cmd/event/event.go

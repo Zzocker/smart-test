@@ -20,7 +20,7 @@ var (
 )
 
 func main() {
-	logger.Println("reading config from %s", *cfgPath)
+	logger.Printf("reading config from %s", *cfgPath)
 	cfg, err := config.ReadConfig(*cfgPath)
 	if err != nil {
 		logger.Panic(err)
