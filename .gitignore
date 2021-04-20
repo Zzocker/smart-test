@@ -1,2 +1,5 @@
 keys
 bin
+node_modules
+cache
+artifacts
