@@ -1,6 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"math/big"
+	"strconv"
+
 	"github.com/Zzocker/smart-test/CryptoZombies/src/config"
 	"github.com/Zzocker/smart-test/CryptoZombies/stub"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -31,7 +35,11 @@ var (
 			if err != nil {
 				return err
 			}
-			auth, contract, err := client(cfg, key)
+			auth, err := getAuth(key)
+			if err != nil {
+				return err
+			}
+			contract, err := getContract(cfg)
 			if err != nil {
 				return err
 			}
@@ -42,10 +50,37 @@ var (
 			return err
 		},
 	}
+	getCMD = &cobra.Command{
+		Use:   "get",
+		Short: "get <index>",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 1 {
+				return fmt.Errorf("invalid index")
+			}
+			index, err := strconv.Atoi(args[0])
+			if err != nil {
+				return err
+			}
+			cfg, err := rootCMD.Flags().GetString("config")
+			if err != nil {
+				return err
+			}
+			contract, err := getContract(cfg)
+			if err != nil {
+				return err
+			}
+			zombie, err := contract.Zombies(nil, big.NewInt(int64(index)))
+			if err != nil {
+				return err
+			}
+			fmt.Printf("%+v\n", zombie)
+			return nil
+		},
+	}
 )
 
 func init() {
-	rootCMD.AddCommand(createCmd)
+	rootCMD.AddCommand(createCmd, getCMD)
 
 	createCmd.Flags().StringP("name", "n", "zzocker", "name of the zombie")
 	rootCMD.PersistentFlags().StringP("config", "c", "./config.yaml", "config file path location")
@@ -58,25 +93,27 @@ func main() {
 	}
 }
 
-func client(cfgPath string, keyPath string) (*bind.TransactOpts, *stub.ZombieFactory, error) {
+func getContract(cfgPath string) (*stub.ZombieFactory, error) {
 	cfg, err := config.ReadConfig(cfgPath)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	// read private key of client
-	key, err := crypto.LoadECDSA(keyPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	auth := bind.NewKeyedTransactor(key)
 
 	client, err := ethclient.Dial(cfg.EthNode.URL)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	contract, err := stub.NewZombieFactory(common.HexToAddress(cfg.Deploy.ContractAddress), client)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return auth, contract, nil
+	return contract, nil
+}
+
+func getAuth(keyPath string) (*bind.TransactOpts, error) {
+	key, err := crypto.LoadECDSA(keyPath)
+	if err != nil {
+		return nil, err
+	}
+	return bind.NewKeyedTransactor(key), nil
 }
