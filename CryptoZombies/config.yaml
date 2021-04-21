@@ -1,0 +1,6 @@
+ethNode:
+    name: local
+    url: ws://localhost:8545
+deploy:
+    ownerKeyPath: keys/owner
+    contractAddress: 0xc5804aEad786F3844aE306906b51c6C510773bd5
