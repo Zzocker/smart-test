@@ -1,6 +1,7 @@
 ethNode:
   name: local
   url: ws://localhost:8545
-deploy:
-  ownerKeyPath: keys/owner
-  contractAddress: 0x4B0D6c4b6d2FC8113A2479B3AB326f2E038b8A48
+kittiContract:
+  config:
+    ownerKeyPath: keys/owner
+    address: 0x1debd887f3F3CA39C6dCF4c5A4F0d11B229b7aE6
